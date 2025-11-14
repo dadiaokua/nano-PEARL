@@ -71,7 +71,7 @@ class PEARLConfig:
     draft_model_path: str
     target_model_path: str
     draft_tensor_parallel_size: int = 2
-    target_tensor_parallel_size: int = 2
+    target_tensor_parallel_size: int = 6
     draft_group_name: str = "draft_group"
     target_group_name: str = "target_group"
     max_num_batched_tokens: int = 16384 # 8192 for 40GB GPUs
