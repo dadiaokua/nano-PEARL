@@ -3,7 +3,6 @@ Benchmark Arguments Parser
 处理 benchmark 工具的命令行参数
 """
 import argparse
-from tkinter import NO
 
 
 def parse_args():

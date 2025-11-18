@@ -19,6 +19,9 @@ dependencies = [
     "flash-attn",
     "xxhash",
     "rich>=14.1.0",
+    "numpy>=1.24.0",
+    "tqdm>=4.65.0",
+    "nvidia-ml-py3>=11.0.0; platform_system != 'Windows'",  # Optional for GPU power monitoring
 ]
 
 [project.urls]

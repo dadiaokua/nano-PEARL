@@ -1,0 +1,19 @@
+# Core dependencies
+torch>=2.4.0
+triton>=3.0.0
+transformers>=4.51.0
+flash-attn
+xxhash
+rich>=14.1.0
+
+# Data processing
+numpy>=1.24.0
+
+# Progress bars
+tqdm>=4.65.0
+
+# GPU power monitoring (optional, for --monitor-power)
+# Note: nvidia-ml-py3 is only available on Linux. On Windows/Mac, GPU power monitoring will be disabled.
+# Install manually: pip install nvidia-ml-py3
+nvidia-ml-py3>=11.0.0; platform_system == 'Linux'
+
