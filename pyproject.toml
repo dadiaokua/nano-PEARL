@@ -16,13 +16,15 @@ dependencies = [
     "torch>=2.4.0",
     "triton>=3.0.0",
     "transformers>=4.51.0",
-    "flash-attn",
     "xxhash",
     "rich>=14.1.0",
     "numpy>=1.24.0",
     "tqdm>=4.65.0",
     "nvidia-ml-py3>=11.0.0; platform_system != 'Windows'",  # Optional for GPU power monitoring
 ]
+# Note: flash-attn is optional and only supported on Ampere+ GPUs (A100/H100/3090/4090)
+# V100 and older GPUs do not support flash-attn
+# Install manually if needed: pip install flash-attn --no-build-isolation
 
 [project.urls]
 Homepage="https://github.com/smart-lty/nano-PEARL"

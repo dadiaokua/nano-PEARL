@@ -54,55 +54,34 @@ conda create -n nano-pearl python=3.12 -y
 conda activate nano-pearl
 ```
 
-### Recommended Installation Methods
+### Installation
 
-**Method 1: Using install script (Recommended)**
+**From source:**
 ```shell
-# Clone the repository
-git clone https://github.com/smart-lty/nano-PEARL.git
-cd nano-PEARL
-
-# Run the installation script
-bash install.sh
-```
-
-**Method 2: Step-by-step installation**
-```shell
-# Step 1: Install torch FIRST (required for flash-attn)
-pip install torch>=2.4.0 triton>=3.0.0
-
-# Step 2: Install flash-attn (requires torch to be installed)
-pip install flash-attn
-
-# Step 3: Install other dependencies
 pip install -r requirements.txt
-
-# Step 4: Install the package
 pip install -e .
 ```
 
-**Method 3: Using uv (Faster)**
-```shell
-uv pip install -e . # uv handles dependencies better
-```
-
-**Method 4: From GitHub**
+**From GitHub:**
 ```shell
 pip install git+https://github.com/smart-lty/nano-PEARL.git
 ```
 
-<details><summary><b>Some hints for potential problem solving</b></summary>
+**Using uv (Faster):**
+```shell
+uv pip install -e .
+```
 
-> ⚠️ **Flash Attention Installation**: `flash-attn` requires `torch` to be installed first. If installation fails, try:
-> ```shell
-> pip install flash-attn --no-build-isolation
-> ```
+<details><summary><b>Installation Notes & Troubleshooting</b></summary>
 
-> ⚠️ **Slow Installation**: If the installation of flash-attn is very slow, we strongly recommend you to download a whl file and **build flash attn from wheel**.
+> ⚠️ **Flash Attention (Optional)**: `flash-attn` is only supported on Ampere+ GPUs (A100/H100/3090/4090). V100 and older GPUs do NOT support it. The code works fine without flash-attn, just uses standard attention instead.
 
 > ⚠️ **GPU Power Monitoring**: `nvidia-ml-py3` is only available on Linux. On Windows/Mac, GPU power monitoring will be automatically disabled.
 
-> 📖 For more detailed installation instructions, see [INSTALL.md](INSTALL.md)
+> 💡 **Slow Installation**: If torch installation seems stuck, it's likely downloading (~2GB package, takes 5-10 minutes). Check network activity or use `pip install --verbose` to see progress.
+
+> 💡 **Network Issues**: If you encounter timeout errors, try: `pip install --default-timeout=1000 -r requirements.txt` or use a faster mirror.
+
 </details>
 
 ## 🚀 Quick Start

@@ -1,25 +1,17 @@
-# IMPORTANT: Install dependencies in this order!
-# 1. First install: torch>=2.4.0 (required for flash-attn build)
-# 2. Then install: flash-attn
-# 3. Then install: everything else
-
-# Step 1: Core dependencies (install torch FIRST)
+# Core dependencies
 torch>=2.4.0
 triton>=3.0.0
-
-# Step 2: Flash Attention (MUST be after torch)
-# Note: If this fails, try: pip install flash-attn --no-build-isolation
-flash-attn
-
-# Step 3: Other dependencies
 transformers>=4.51.0
 xxhash
 rich>=14.1.0
 numpy>=1.24.0
 tqdm>=4.65.0
 
-# GPU power monitoring (optional, for --monitor-power)
-# Note: nvidia-ml-py3 is only available on Linux. On Windows/Mac, GPU power monitoring will be disabled.
-# Install manually: pip install nvidia-ml-py3
+# GPU power monitoring (optional, Linux only)
 nvidia-ml-py3>=11.0.0; platform_system == 'Linux'
+
+# Flash Attention (OPTIONAL - only for Ampere+ GPUs like A100/H100/3090/4090)
+# V100 and older GPUs do NOT support flash-attn
+# Uncomment the line below if you have compatible GPU:
+# flash-attn
 
