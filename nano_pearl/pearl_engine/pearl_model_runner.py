@@ -97,7 +97,30 @@ class ModelRunnerBase:
         """
         self.default_dtype = torch.get_default_dtype()
         torch.cuda.set_device(self.rank)
-        torch.set_default_dtype(self.hf_config.torch_dtype)
+        
+        # Check GPU bfloat16 support and adjust dtype if needed
+        # Use dtype instead of deprecated torch_dtype
+        model_dtype = getattr(self.hf_config, 'dtype', None) or getattr(self.hf_config, 'torch_dtype', torch.float32)
+        
+        if model_dtype == torch.bfloat16:
+            # Check if GPU supports bfloat16
+            compute_capability = torch.cuda.get_device_capability(self.rank)
+            major, minor = compute_capability
+            
+            # bfloat16 requires Ampere (8.0) or newer
+            if major < 8:
+                gpu_name = torch.cuda.get_device_name(self.rank)
+                if self.rank == 0:
+                    logger.warning(f"GPU {gpu_name} (compute capability {major}.{minor}) does not support bfloat16.")
+                    logger.warning(f"Automatically converting model to float16 for compatibility.")
+                model_dtype = torch.float16
+                # Update both for compatibility
+                if hasattr(self.hf_config, 'dtype'):
+                    self.hf_config.dtype = torch.float16
+                if hasattr(self.hf_config, 'torch_dtype'):
+                    self.hf_config.torch_dtype = torch.float16
+        
+        torch.set_default_dtype(model_dtype)
         torch.set_default_device("cuda")
         self.model = model_dict[self.hf_config.architectures[0]](self.hf_config, self.tp_params)
         load_model(self.model, self.group_config.model)
@@ -128,7 +151,9 @@ class ModelRunnerBase:
             if hasattr(hf_config, "head_dim")
             else hf_config.hidden_size // hf_config.num_attention_heads
         )
-        block_bytes = 2 * hf_config.num_hidden_layers * self.block_size * num_kv_heads * head_dim * hf_config.torch_dtype.itemsize
+        # Use dtype instead of deprecated torch_dtype
+        dtype = getattr(hf_config, 'dtype', None) or getattr(hf_config, 'torch_dtype', torch.float32)
+        block_bytes = 2 * hf_config.num_hidden_layers * self.block_size * num_kv_heads * head_dim * dtype.itemsize
         self.global_config.num_kvcache_blocks = int(total * self.global_config.gpu_memory_utilization - used - peak + current) // block_bytes
         assert self.global_config.num_kvcache_blocks > 0
         self.kv_cache = torch.empty(2, hf_config.num_hidden_layers, self.global_config.num_kvcache_blocks, self.block_size, num_kv_heads, head_dim)

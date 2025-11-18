@@ -74,7 +74,12 @@ uv pip install -e .
 
 <details><summary><b>Installation Notes & Troubleshooting</b></summary>
 
-> ⚠️ **Flash Attention (Optional)**: `flash-attn` is only supported on Ampere+ GPUs (A100/H100/3090/4090). V100 and older GPUs do NOT support it. The code works fine without flash-attn, just uses standard attention instead.
+> ⚠️ **GPU Requirements**: nano-PEARL works best on **Ampere+ GPUs** (compute capability >= 8.0):
+> - ✅ **Best Performance**: A100, H100, A10, RTX 3090, RTX 4090 (with flash-attn)
+> - ⚠️ **Slower but Supported**: V100, T4, P100 (fallback attention, 3-5x slower)
+> - Older GPUs use fallback PyTorch attention automatically
+
+> 💡 **Flash Attention (Optional but Recommended)**: `flash-attn` provides 3-5x speedup on Ampere+ GPUs. On older GPUs (V100, T4), the project automatically uses a fallback implementation.
 
 > ⚠️ **GPU Power Monitoring**: `nvidia-ml-py3` is only available on Linux. On Windows/Mac, GPU power monitoring will be automatically disabled.
 

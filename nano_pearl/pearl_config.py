@@ -1,4 +1,5 @@
 import os
+import warnings
 from nano_pearl.utils.pearl_logger import logger, get_model_name
 from dataclasses import dataclass
 from transformers import AutoConfig
@@ -23,7 +24,12 @@ class BaseConfig:
         self.tensor_parallel_size = tensor_parallel_size
         self.devices = devices
         self.group_name = group_name
-        self.hf_config = AutoConfig.from_pretrained(self.model)
+        
+        # Suppress the torch_dtype deprecation warning from transformers
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message=".*torch_dtype.*deprecated.*")
+            self.hf_config = AutoConfig.from_pretrained(self.model)
+        
         self.eos = self.hf_config.eos_token_id
         self.master_rank = self.devices[0]
         logger.info(f"Model={get_model_name(self.model)}")
