@@ -54,21 +54,55 @@ conda create -n nano-pearl python=3.12 -y
 conda activate nano-pearl
 ```
 
-Then, install packages with `uv` or `pip`:
-**From source:**
+### Recommended Installation Methods
+
+**Method 1: Using install script (Recommended)**
 ```shell
-uv pip install -e . # from current path
+# Clone the repository
+git clone https://github.com/smart-lty/nano-PEARL.git
+cd nano-PEARL
+
+# Run the installation script
+bash install.sh
 ```
 
-**From GitHub:**
+**Method 2: Step-by-step installation**
 ```shell
-pip install git+https://github.com/smart-lty/nano-PEARL.git # from github
+# Step 1: Install torch FIRST (required for flash-attn)
+pip install torch>=2.4.0 triton>=3.0.0
+
+# Step 2: Install flash-attn (requires torch to be installed)
+pip install flash-attn
+
+# Step 3: Install other dependencies
+pip install -r requirements.txt
+
+# Step 4: Install the package
+pip install -e .
 ```
+
+**Method 3: Using uv (Faster)**
+```shell
+uv pip install -e . # uv handles dependencies better
+```
+
+**Method 4: From GitHub**
+```shell
+pip install git+https://github.com/smart-lty/nano-PEARL.git
+```
+
 <details><summary><b>Some hints for potential problem solving</b></summary>
 
-> ⚠️ When you directly use pip for installation, you may encounter that build flash-attn needs torch installed. In this case, you should **install torch first**, and then re-run the installation command.
+> ⚠️ **Flash Attention Installation**: `flash-attn` requires `torch` to be installed first. If installation fails, try:
+> ```shell
+> pip install flash-attn --no-build-isolation
+> ```
 
-> ⚠️ If the installation of flash-attn is very slow, we strongly recommend you to download a whl file and **build flash attn from wheel**.
+> ⚠️ **Slow Installation**: If the installation of flash-attn is very slow, we strongly recommend you to download a whl file and **build flash attn from wheel**.
+
+> ⚠️ **GPU Power Monitoring**: `nvidia-ml-py3` is only available on Linux. On Windows/Mac, GPU power monitoring will be automatically disabled.
+
+> 📖 For more detailed installation instructions, see [INSTALL.md](INSTALL.md)
 </details>
 
 ## 🚀 Quick Start

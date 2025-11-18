@@ -1,15 +1,21 @@
-# Core dependencies
+# IMPORTANT: Install dependencies in this order!
+# 1. First install: torch>=2.4.0 (required for flash-attn build)
+# 2. Then install: flash-attn
+# 3. Then install: everything else
+
+# Step 1: Core dependencies (install torch FIRST)
 torch>=2.4.0
 triton>=3.0.0
-transformers>=4.51.0
+
+# Step 2: Flash Attention (MUST be after torch)
+# Note: If this fails, try: pip install flash-attn --no-build-isolation
 flash-attn
+
+# Step 3: Other dependencies
+transformers>=4.51.0
 xxhash
 rich>=14.1.0
-
-# Data processing
 numpy>=1.24.0
-
-# Progress bars
 tqdm>=4.65.0
 
 # GPU power monitoring (optional, for --monitor-power)
